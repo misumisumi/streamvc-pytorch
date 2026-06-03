@@ -1,0 +1,72 @@
+# @package _global_
+
+defaults:
+  - _self_
+  # - generator: seanet.hubert
+  - data: vctk
+  # - data: ljspeech.hubert
+  # - generator: seanet.hubert
+  - generator: streamvc
+  # - data: jvs.hubert
+
+hydra:
+  run:
+    dir: ./
+  output_subdir: null
+  job_logging:
+    formatters:
+      simple:
+        format: "[%(asctime)s][%(levelname)s][%(module)s | %(lineno)s] %(message)s"
+    disable_existing_loggers: false
+
+# out_dir: # exp/vctk.seanet.spk.hubert.univnet
+out_dir: exp/streamvc-decoder
+spkidx: 0
+# spkidx: -5 # 0 is parent_dir == spk name
+checkpoint_path: # Path to the checkpoint of pre-trained model.
+checkpoint_steps: 100000 # Path to the checkpoint of pre-trained model.
+seed: 100 # Seed number for random numbers.
+save_source: false # Whether to save source excitation signals.
+f0_factors:
+  - 1.0
+  # - 0.70
+  # - 0.80
+  # - 0.90
+  # - 1.10
+  # - 1.20
+  # - 1.30
+formants_factors:
+  - [1.0, 1.0, 1.0, 1.0]
+  # - [0.5, 1.0, 1.0, 1.0]
+  # - [1.0, 0.5, 1.0, 1.0]
+  # - [1.0, 1.0, 0.5, 1.0]
+  # - [1.0, 1.0, 1.0, 0.5]
+  # - [1.0, 1.5, 1.0, 1.0]
+  # - [1.0, 1.0, 1.5, 1.0]
+  # - [1.0, 1.0, 1.0, 1.5]
+  # - [1.0, 1.0, 1.0, 1.0]
+  # - [0.7, 1.0, 1.0, 1.0]
+  # - [0.8, 1.0, 1.0, 1.0]
+  # - [0.9, 1.0, 1.0, 1.0]
+  # - [1.1, 1.0, 1.0, 1.0]
+  # - [1.2, 1.0, 1.0, 1.0]
+  # - [1.3, 1.0, 1.0, 1.0]
+  # - [1.0, 0.7, 1.0, 1.0]
+  # - [1.0, 0.8, 1.0, 1.0]
+  # - [1.0, 0.9, 1.0, 1.0]
+  # - [1.0, 1.1, 1.0, 1.0]
+  # - [1.0, 1.2, 1.0, 1.0]
+  # - [1.0, 1.3, 1.0, 1.0]
+  # - [1.0, 1.0, 0.7, 1.0]
+  # - [1.0, 1.0, 0.8, 1.0]
+  # - [1.0, 1.0, 0.9, 1.0]
+  # - [1.0, 1.0, 1.1, 1.0]
+  # - [1.0, 1.0, 1.2, 1.0]
+  # - [1.0, 1.0, 1.3, 1.0]
+  # - [1.0, 1.0, 1.0, 0.7]
+  # - [1.0, 1.0, 1.0, 0.8]
+  # - [1.0, 1.0, 1.0, 0.9]
+  # - [1.0, 1.0, 1.0, 1.1]
+  # - [1.0, 1.0, 1.0, 1.2]
+  # - [1.0, 1.0, 1.0, 1.3]
+device: cuda

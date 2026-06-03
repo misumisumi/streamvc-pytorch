@@ -1,0 +1,78 @@
+# Interval setting
+discriminator_train_start_steps: 0 # Number of steps to start to train discriminator.
+train_max_steps: 500001 # Number of pre-training steps.
+save_interval_steps: # Interval steps to save checkpoint.
+  - 1000
+  - 2000
+  - 5000
+  - 10000
+  - 20000
+  - 50000
+eval_interval_steps: # Interval steps to evaluate the network.
+  - 1000
+log_interval_steps: 100 # Interval steps to record the training log.
+# Epoch to resume training.
+resume:
+resume_path: exp/streamvc-encoder/checkpoints/checkpoint-100000steps.pkl
+
+check_intermediate_result: true
+amp: # Use automatic mised precision (torch.amp)
+  enabled: true
+
+early_stopping:
+  enabled: false
+  patience: 7
+  delta: 0
+  target_loss: "mel"
+
+# Loss balancing coefficients.
+lambda_mel: 100.0
+lambda_reg: 0.0
+lambda_adv: 1.0
+lambda_fm: 1.0
+
+# Mel-spectral loss setting
+mel_loss:
+  _target_: streamvc.losses.MultiScaleMelSpectrogramLoss
+  range_start: 6
+  range_end: 12
+  window: hann_window
+  n_mels: 64
+  fmin: 0
+  fmax: null
+  log_base: null
+  fs: 16000
+
+# Adversarial loss setting
+adv_loss:
+  _target_: streamvc.losses.AdversarialLoss
+  average_by_discriminators: false # Whether to average loss by #discriminators.
+  loss_type: mse
+
+# Feature matching loss setting
+fm_loss:
+  _target_: streamvc.losses.FeatureMatchLoss
+  average_by_layers: false # Whether to average loss by #layers in each discriminator.
+  average_by_fmap_real: false
+
+# Optimizer and scheduler setting
+generator_optimizer:
+  _target_: torch.optim.Adam
+  lr: 2.0e-4
+  betas: [0.5, 0.9]
+  eps: 1.0e-9
+  weight_decay: 0.0
+generator_scheduler:
+  _target_: torch.optim.lr_scheduler.ExponentialLR
+  gamma: 0.999875
+generator_grad_norm: 10
+discriminator_optimizer:
+  _target_: torch.optim.Adam
+  lr: 2.0e-4
+  betas: [0.5, 0.9]
+  eps: 1.0e-9
+  weight_decay: 0.0
+discriminator_scheduler:
+  _target_: torch.optim.lr_scheduler.ExponentialLR
+  gamma: 0.999875
+discriminator_grad_norm: 10

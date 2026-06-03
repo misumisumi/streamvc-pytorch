@@ -1,0 +1,36 @@
+# Interval setting
+train_max_steps: 100001 # Number of pre-training steps.
+save_interval_steps: # Interval steps to save checkpoint.
+  - 5000
+eval_interval_steps: # Interval steps to evaluate the network.
+  - 10
+  - 1000
+log_interval_steps: 100 # Interval steps to record the training log.
+resume: # Epoch to resume training.
+
+check_intermediate_result: true
+amp: # Use automatic mised precision (torch.amp)
+  enabled: true
+
+early_stopping:
+  enabled: false
+  patience: 7
+  delta: 0
+  target_loss: "mel"
+
+# Mel-spectral loss setting
+cross_entropy_loss:
+  _target_: torch.nn.CrossEntropyLoss
+
+# Optimizer and scheduler setting
+# NOTE: https://github.com/bshall/hubert/blob/c01819f21aa07393b213189094e85adbf5fbb8d7/train.py
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: 2.0e-5
+  betas: [0.9, 0.98]
+  eps: 1.0e-6
+  weight_decay: 1e-2
+scheduler:
+  _target_: torch.optim.lr_scheduler.ExponentialLR
+  gamma: 1.00 # 0.999875, 1.00=disable scheduler
+generator_grad_norm: 10

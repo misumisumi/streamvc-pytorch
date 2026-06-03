@@ -1,0 +1,27 @@
+# @package _global_
+
+defaults:
+  - _self_
+  # - train/encoder@train: streamvc
+  # - data: libritts
+  # - generator: streamvc
+  - train/encoder@train: streamvc
+  # - data: libritts
+  # - generator: streamvc
+  - data: libritts.lookahead
+  - generator: streamvc.causal
+
+hydra:
+  run:
+    dir: ./
+  output_subdir: null
+  job_logging:
+    formatters:
+      simple:
+        format: "[%(asctime)s][%(levelname)s][%(module)s | %(lineno)s] %(message)s"
+    disable_existing_loggers: false
+
+# out_dir: exp/ljspeech.hifigan.hubert.univnet.ms_mel_loss # Directory to output training results.
+out_dir: exp/streamvc.causal.lookahead-encoder
+seed: 12345 # Seed number for random numbers.
+device: cuda

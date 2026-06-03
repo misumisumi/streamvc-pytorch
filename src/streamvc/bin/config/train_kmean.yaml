@@ -1,0 +1,25 @@
+# @package _global_
+
+defaults:
+  - _self_
+
+hydra:
+  run:
+    dir: ./
+  output_subdir: null
+  job_logging:
+    formatters:
+      simple:
+        format: "[%(asctime)s][%(levelname)s][%(module)s | %(lineno)s] %(message)s"
+    disable_existing_loggers: false
+
+# out_dir: exp/ljspeech.hifigan.hubert.univnet.ms_mel_loss # Directory to output training results.
+file_list: data/list/LibriTTS/clean-100.scp
+out_dir: data/kmean/LibriTTS
+seed: 12345 # Seed number for random numbers.
+device: cuda
+
+hubert_model: "facebook/hubert-base-ls960"
+use_hubert_layer_idx: 6
+n_clusters: 100
+batch_size: 2048 # 256*cores for faster computations

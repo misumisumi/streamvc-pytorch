@@ -1,0 +1,32 @@
+# Default audio preprocess setting.
+sample_rate: 24000 # Sampling rate.
+inv: true # If false, wav is restored from acoustic features.
+
+highpass_cutoff: 70 # Cut-off-frequency for low-cut-filter.
+center: false # Pad the extracted sample to the center of the frame
+
+# Mel-spectrogram extraction setting.
+n_mels: 80
+hop_size: 300 # Hop size.
+win_size: 1200 # Window length.
+n_fft: 2048
+window: hann # Window function.
+fmin: 80 # Minimum frequency in mel basis calculation.
+fmax: 7600 # Maximum frequency in mel basis calculation.
+clip_val: 1e-5
+log: "log10"
+
+mcep_order: 39
+
+# Praat settings
+# Use fft_size or win_size of Mel-spectrogram extraction setting
+f0_extractor: "harvest"
+minf0: 75.0 # Minimum F0 value.
+maxf0: 600 # Maximum F0 value.
+thresholds: 0.6
+
+# Burg
+n_formant: 5
+fo_max: 5000
+fo_win_size: 600
+pre_enphasis: 50

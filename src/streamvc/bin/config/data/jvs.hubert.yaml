@@ -1,0 +1,33 @@
+# Dataset settings
+train_audio:
+  - data/scp/JVS001_002/train.scp # List file of training audio files.
+train_feat:
+  - data/scp/JVS001_002/train.list # List file of training feature files.
+valid_audio:
+  - data/scp/JVS001_002/valid.scp # List file of validation audio files.
+valid_feat:
+  - data/scp/JVS001_002/valid.list # List file of validation feature files.
+eval_feat:
+  - data/scp/JVS001_002/test.list # List file of evaluation feature files for decoding.
+stats:
+  - data/stats/jvs_no_dev.joblib # Path to the file of statistics.
+allow_cache: true # Whether to allow cache in dataset. If true, it requires cpu memory
+
+# Feature settings
+sample_rate: 16000 # Sampling rate.
+hop_size: 320 # Hop size.
+# Auxiliary features.
+aux_feats:
+  - hubert
+spk_feat: wespeaker
+
+# Collator setting
+batch_max_length: 16000 # Length of each audio in batch. Make sure dividable by hop_size.
+
+# Data loader setting
+batch_size: 32 # Batch size
+num_workers: 1 # Number of workers in Pytorch DataLoader
+pin_memory: true # Whether to pin memory in Pytorch DataLoader
+
+# Other setting
+remove_short_samples: true # Whether to remove samples the length of which are less than batch_max_length

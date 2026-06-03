@@ -1,0 +1,56 @@
+encoder:
+  _target_: streamvc.models.encoder.hubert.HuBERTEncoder
+  use_hubert_layer_idx: 6
+  hubert_model: data/pretrained/hubert-base-ls960
+
+decoder:
+  _target_: streamvc.models.decoder.seanet.SEANetDecoder
+  dimension: 778
+  channels: 1
+  n_filters: 40
+  n_residual_layers: 1
+  ratios:
+    - 8
+    - 5
+    - 4
+    - 2
+  activation: ELU
+  activation_params:
+    alpha: 1.0
+  norm: weight_norm
+  norm_params: { "": "" }
+  kernel_size: 7
+  residual_kernel_size: 7
+  last_kernel_size: 7
+  dilation_base: 2
+  causal: False
+  pad_mode: reflect
+  true_skip: False
+  compress: 2
+  lstm: 0
+  condition_dim: 192
+
+spk_encoder:
+  _target_: streamvc.models.encoder.seanet.SEANetEncoder
+  channels: 1
+  dimension: 64
+  n_filters: 32
+  n_residual_layers: 3
+  ratios:
+    - 8
+    - 5
+    - 4
+    - 2
+  activation: ELU
+  activation_params:
+    alpha: 1.0
+  norm: weight_norm
+  kernel_size: 7
+  residual_kernel_size: 7
+  last_kernel_size: 7
+  dilation_base: 2
+  causal: false
+  pad_mode: reflect
+  true_skip: false
+  compress: 2
+  lstm: 0

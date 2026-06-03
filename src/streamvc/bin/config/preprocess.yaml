@@ -1,0 +1,23 @@
+defaults:
+  - _self_
+
+file_list: data/list/LibriTTS/valid.scp
+output_dir: /localtmp2/sumiharu.kobayashi.r4/datasets/features/LibriTTS/dev
+# file_list: data/list/VCTK/train.scp
+# output_dir: /localtmp2/sumiharu.kobayashi.r4/datasets/features/VCTK/train
+device: cuda
+n_jobs: 10
+
+wespeaker_model: data/pretrained/wespeaker-voxceleb-ecapa-tdnn1024
+hubert:
+  kmean_model: data/kmean/LibriTTS/kmeans_100clusters.pt
+  use_hubert_layer_idx: 6
+  hubert_model: data/pretrained/hubert-base-ls960
+
+yin:
+  minf0: 75.0 # Minimum F0 value.
+  maxf0: 600 # Maximum F0 value.
+  thresholds:
+    - 0.05
+    - 0.1
+    - 0.15

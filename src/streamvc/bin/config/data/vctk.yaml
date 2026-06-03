@@ -1,0 +1,29 @@
+# Dataset settings
+train_audio: data/list/VCTK/train.scp
+train_feat: data/list/VCTK/train.list
+valid_audio: data/list/VCTK/valid.scp
+valid_feat: data/list/VCTK/valid.list
+test_audio: data/list/VCTK/test.scp
+test_feat: data/list/VCTK/test.list
+
+allow_cache: true # Whether to allow cache in dataset. If true, it requires cpu memory
+use_spk_emb: true
+
+# Feature settings
+sample_rate: 16000 # Sampling rate.
+hop_size: 320 # Hop size.
+# Auxiliary features.
+aux_feats:
+  - f0
+  - vuv
+  - cmdf
+  - energy
+batch_max_length: 48000 # Length of each audio in batch. Make sure dividable by hop_size.
+
+# Data loader setting
+batch_size: 32 # Batch size
+num_workers: 1 # Number of workers in Pytorch DataLoader
+pin_memory: true # Whether to pin memory in Pytorch DataLoader
+
+# Other setting
+remove_short_samples: true # Whether to remove samples the length of which are less than batch_max_length

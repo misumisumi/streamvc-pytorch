@@ -1,0 +1,24 @@
+_target_: streamvc.models.decoder.SEANetDecoder
+dimension: 768
+channels: 1
+n_filters: 32
+n_residual_layers: 1
+ratios:
+  - 8
+  - 5
+  - 4
+  - 2
+activation: ELU
+activation_params:
+  alpha: 1.0
+norm: weight_norm
+norm_params: { "": "" }
+kernel_size: 7
+residual_kernel_size: 7
+last_kernel_size: 7
+dilation_base: 2
+causal: False
+pad_mode: reflect
+true_skip: False
+compress: 2
+lstm: 2
