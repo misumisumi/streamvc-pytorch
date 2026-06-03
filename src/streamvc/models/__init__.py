@@ -12,6 +12,10 @@ class StreamVC(nn.Module):
         super(StreamVC, self).__init__()
         self.encoder = hydra.utils.instantiate(config.encoder)
         self.decoder = hydra.utils.instantiate(config.decoder)
+        if config.spk_encoder is not None:
+            self.spk_encoder = hydra.utils.instantiate(config.spk_encoder)
+        else:
+            self.spk_encoder = None
 
     def forward_encoder(self, x):
         h = self.encoder(x)
@@ -26,9 +30,10 @@ class StreamVC(nn.Module):
     def forward(self, wav, c=None, s=None):
         h = self.forward_encoder(wav)
         h = h.detach()
-        h = h[:, :, : c.size(-1)]
         if c is not None:
             h = torch.cat([h, c], dim=1)
+        if self.spk_encoder is not None and s is not None:
+            s = self.spk_encoder(s)
         y = self.forward_decoder(h, s)
 
         return y

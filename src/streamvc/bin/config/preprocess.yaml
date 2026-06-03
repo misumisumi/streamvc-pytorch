@@ -15,6 +15,7 @@ hubert:
   hubert_model: data/pretrained/hubert-base-ls960
 
 yin:
+  sample_rate: 16000
   minf0: 75.0 # Minimum F0 value.
   maxf0: 600 # Maximum F0 value.
   thresholds:

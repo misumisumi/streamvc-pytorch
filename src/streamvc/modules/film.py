@@ -23,10 +23,13 @@ class FiLM(nn.Module):
 
         # Generate gamma (scale) and beta (bias) from condition
         self.fc = nn.Linear(condition_dim, in_channels * 2)
-
-        # Initialize weights
+        # 重みは 0 に初期化
         nn.init.zeros_(self.fc.weight)
-        nn.init.zeros_(self.fc.bias)
+
+        # バイアスの前半（gamma用）を 1.0、後半（beta用）を 0.0 に初期化
+        with torch.no_grad():
+            self.fc.bias[:in_channels].fill_(1.0)
+            self.fc.bias[in_channels:].fill_(0.0)
 
     def forward(self, x: torch.Tensor, condition: torch.Tensor) -> torch.Tensor:
         """

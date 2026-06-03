@@ -150,13 +150,13 @@ class MelSpectrogramLoss(nn.Module):
             self.onesided,
             self.normalized,
         )
-        x_log_mel = torch.clamp(torch.matmul(x_mag, self.melmat), min=1e-7)
-        y_log_mel = torch.clamp(torch.matmul(y_mag, self.melmat), min=1e-7)
+        x_mel = torch.clamp(torch.matmul(x_mag, self.melmat), min=1e-7)
+        y_mel = torch.clamp(torch.matmul(y_mag, self.melmat), min=1e-7)
 
         if use_mse:
-            mel_loss = F.mse_loss(self.log_func(x_log_mel), self.log_func(y_log_mel))
+            mel_loss = F.mse_loss(self.log_func(x_mel), self.log_func(y_mel))
         else:
-            mel_loss = F.l1_loss(x_log_mel, y_log_mel)
+            mel_loss = F.l1_loss(x_mel, y_mel)
 
         return mel_loss
 

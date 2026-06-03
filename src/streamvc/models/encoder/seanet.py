@@ -48,7 +48,7 @@ class ConvLayerNorm(nn.LayerNorm):
         x = einops.rearrange(x, "b ... t -> b t ...")
         x = super().forward(x)
         x = einops.rearrange(x, "b t ... -> b ... t")
-        return
+        return x
 
 
 def apply_parametrization_norm(module: nn.Module, norm: str = "none") -> nn.Module:
@@ -452,3 +452,54 @@ class SEANetEncoder(nn.Module):
 
     def forward(self, x):
         return self.model(x)
+
+
+class LearnablePooling(nn.Module):
+    def __init__(self, dimension=64):
+        super().__init__()
+        self.query = nn.Parameter(torch.randn(1, dimension, 1))
+
+    def forward(self, x):
+        # x: 話者エンコーダから出力されたフレームごとの特徴量
+        # 形状: (Batch, embed_dim, Time)
+
+        # 1. アテンションスコアの計算 (Attention mechanism)
+        # 学習可能なクエリと各フレームの内積を計算し、時間軸方向のスコアを出力
+        # scoresの形状: (Batch, 1, Time)
+        scores = torch.sum(self.query * x, dim=1, keepdim=True)
+
+        # 2. 重みの正規化
+        # 時間軸 (dim=2) に対してSoftmaxを適用し、合計が1になる重みを作成
+        attn_weights = F.softmax(scores, dim=2)
+
+        # 3. 平均プーリングの重み付き一般化 (weighted generalization of average pooling)
+        # 各フレームの特徴量にアテンション重みを掛け、時間軸方向に合計して1つのベクトルに集約
+        pooled_x = torch.sum(x * attn_weights, dim=2)
+
+        # 出力の形状: (Batch, embed_dim)
+        return pooled_x
+
+
+class SEANetSpkEncoder(SEANetEncoder):
+    """SEANet encoder with speaker conditioning.
+
+    Args:
+        spk_dim (int): Dimension of the speaker embedding.
+        spk_cond_layer (int): Layer at which to inject the speaker conditioning.
+            Should be between 0 and the total number of convolutional layers in the
+            model (inclusive). If equal to the total number of convolutional layers,
+            the conditioning will be injected right before the final convolution.
+        Other args are the same as SEANetEncoder.
+    """
+
+    def __init__(
+        self,
+        **kwargs,
+    ):
+        super().__init__(**kwargs)
+        self.learnable_pooling = LearnablePooling(dimension=self.dimension)
+
+    def forward(self, x):
+        h = self.model(x)
+
+        return self.learnable_pooling(h)

@@ -28,7 +28,7 @@ decoder:
   true_skip: False
   compress: 2
   lstm: 0
-  condition_dim: 192
+  condition_dim: 64
 
 spk_encoder:
   _target_: streamvc.models.encoder.seanet.SEANetEncoder
